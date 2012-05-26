@@ -4,6 +4,11 @@ A java library for reading mp3 files and reading / manipulating the ID3 tags (ID
 
 A simple set of command-line tools built on top of the library are included which perform tasks such including printing mp3 and ID3 details, renaming mp3 files using details from the ID3 tags, retagging mp3 files, attaching images to mp3 files and extracting images from mp3 files.
 
+## Goals of this fork
+* Increase compatibility with Android (i.e. fix slowness issue, take values Android gets into account…)
+* Support reading APEv2 tags
+* Support ReplayGain, Album Artists, and any other tags I use
+
 ## Some features
 
 * 100% Java
