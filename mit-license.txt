@@ -1,4 +1,5 @@
-Copyright (c) 2006-2010 Michael Patricios http://github.com/mpatric/mp3agic
+Copyright (c) 2006-2010 Michael Patricios http://github.com/mpatric/mp3agic 
+Copyright (c) 2012-2016 Michael Genay http://github.com/urdle/mp3agic 
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

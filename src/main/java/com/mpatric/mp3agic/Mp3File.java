@@ -66,6 +66,7 @@ public class Mp3File extends FileWrapper {
 				throw new InvalidDataException("No mpegs frames found");
 			}
 			initId3v2Tag(file);
+			initAPEv2Tag(file);
 			if (scanFile) {
 				initCustomTag(file);
 			}
@@ -260,6 +261,47 @@ public class Mp3File extends FileWrapper {
 		}
 	}
 	
+	private void initAPEv2Tag(RandomAccessFile file) throws IOException, UnsupportedTagException, InvalidDataException {
+		System.out.println(file.length() + "//" + id3v2Tag.getLength());
+		isAPEv2HeaderStart(file,0);
+		isAPEv2HeaderStart(file,id3v2Tag.getLength());
+		isAPEv2FooterEnd(file,(int)file.length()-ID3v1Tag.TAG_LENGTH);
+		isAPEv2FooterEnd(file,(int)file.length());
+		
+		int APEStartOffset=
+	}
+	
+	private boolean isAPEv2HeaderStart(RandomAccessFile file, int offset) throws IOException, UnsupportedTagException, InvalidDataException {
+		int bufferLength=32;
+		file.seek(offset);
+		byte[] bytes = new byte[bufferLength+1];
+			int bytesRead = file.read(bytes, 0, bufferLength);
+			if (bytesRead < bufferLength) throw new IOException("Not enough bytes read");
+			System.out.println(new String(bytes,0,32));
+			if ( isAPEv2HeaderOrFooter(bytes) ) {
+				int APEStartOffset=
+			} else
+				return false;
+			}
+		}
+	
+	private boolean isAPEv2FooterEnd(RandomAccessFile file, int offset) throws IOException, UnsupportedTagException, InvalidDataException {
+		int bufferLength=32;
+		file.seek(offset-bufferLength);
+		byte[] bytes = new byte[bufferLength+1];
+			int bytesRead = file.read(bytes, 0, bufferLength);
+			if (bytesRead < bufferLength) throw new IOException("Not enough bytes read");
+			System.out.println(new String(bytes,0,bufferLength));
+			return isAPEv2HeaderOrFooter(bytes);
+		}
+	
+private boolean isAPEv2HeaderOrFooter(byte[] bytes) throws IOException, UnsupportedTagException, InvalidDataException {
+	int bufferLength=32;
+	System.out.println(new String(bytes,0,bufferLength));
+	String Preambule=new String(bytes,0,8);
+	return (Preambule.equals("APETAGEX"));
+}
+
 	private void initCustomTag(RandomAccessFile file) throws IOException {
 		int bufferLength = (int)(getLength() - (endOffset + 1));
 		if (hasId3v1Tag()) bufferLength -= ID3v1Tag.TAG_LENGTH;
