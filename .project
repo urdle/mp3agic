@@ -14,4 +14,16 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>bin</name>
+			<type>2</type>
+			<location>C:/Users/Michael/workspace/mp3agic-urdle/bin</location>
+		</link>
+		<link>
+			<name>java</name>
+			<type>2</type>
+			<location>C:/Users/Michael/workspace/mp3agic-urdle/src/main/java</location>
+		</link>
+	</linkedResources>
 </projectDescription>
