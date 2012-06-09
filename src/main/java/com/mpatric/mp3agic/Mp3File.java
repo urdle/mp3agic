@@ -31,6 +31,7 @@ public class Mp3File extends FileWrapper {
 	private String version;
 	private ID3v1 id3v1Tag;
 	private ID3v2 id3v2Tag;
+	private APEv2 apev2Tag;
 	private byte[] customTag;
 	private boolean scanFile;
 	
@@ -262,16 +263,25 @@ public class Mp3File extends FileWrapper {
 	}
 	
 	private void initAPEv2Tag(RandomAccessFile file) throws IOException, UnsupportedTagException, InvalidDataException {
-		System.out.println(file.length() + "//" + id3v2Tag.getLength());
-		isAPEv2HeaderStart(file,0);
-		isAPEv2HeaderStart(file,id3v2Tag.getLength());
-		isAPEv2FooterEnd(file,(int)file.length()-ID3v1Tag.TAG_LENGTH);
-		isAPEv2FooterEnd(file,(int)file.length());
+		//System.out.println(file.length() + "//" + id3v2Tag.getLength());
 		
-		int APEStartOffset=
+		try {
+			int id3v1size=0;
+			int id3v2size=0;
+			
+			if (id3v2Tag != null) { id3v2size=id3v2Tag.getLength(); }
+			if (id3v1Tag != null) { id3v1size=ID3v1Tag.TAG_LENGTH; }
+					
+			int endOffset=(int)file.length()-id3v1size;
+			apev2Tag=new APEv2Tag(file, id3v2size, endOffset);
+		} catch (NoSuchTagException e) {
+			// TODO Auto-generated catch block
+			apev2Tag=null;
+			//e.printStackTrace();
+		}
 	}
 	
-	private boolean isAPEv2HeaderStart(RandomAccessFile file, int offset) throws IOException, UnsupportedTagException, InvalidDataException {
+/*	private boolean isAPEv2HeaderStart(RandomAccessFile file, int offset) throws IOException, UnsupportedTagException, InvalidDataException {
 		int bufferLength=32;
 		file.seek(offset);
 		byte[] bytes = new byte[bufferLength+1];
@@ -301,7 +311,7 @@ private boolean isAPEv2HeaderOrFooter(byte[] bytes) throws IOException, Unsuppor
 	String Preambule=new String(bytes,0,8);
 	return (Preambule.equals("APETAGEX"));
 }
-
+*/
 	private void initCustomTag(RandomAccessFile file) throws IOException {
 		int bufferLength = (int)(getLength() - (endOffset + 1));
 		if (hasId3v1Tag()) bufferLength -= ID3v1Tag.TAG_LENGTH;

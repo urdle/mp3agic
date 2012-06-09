@@ -3,14 +3,14 @@ package com.mpatric.mp3agic;
 import java.util.ArrayList;
 import java.util.List;
 
-public class APEv2FrameSet {
+public class APEv2TagItemSet {
 
 	private String id;
-	private ArrayList<APEv2Frame> frames;
+	private ArrayList<APEv2TagItem> frames;
 	
-	public APEv2FrameSet(String id) {
+	public APEv2TagItemSet(String id) {
 		this.id = id;
-		frames = new ArrayList<APEv2Frame>();
+		frames = new ArrayList<APEv2TagItem>();
 	}
 
 	public String getId() {
@@ -21,11 +21,11 @@ public class APEv2FrameSet {
 		frames.clear();		
 	}
 	
-	public void addFrame(APEv2Frame frame) {
+	public void addFrame(APEv2TagItem frame) {
 		frames.add(frame);
 	}
 
-	public List<APEv2Frame> getFrames() {
+	public List<APEv2TagItem> getFrames() {
 		return frames;
 	}
 	
@@ -35,9 +35,9 @@ public class APEv2FrameSet {
 	}
 	
 	public boolean equals(Object obj) {
-		if (! (obj instanceof APEv2FrameSet)) return false;
+		if (! (obj instanceof APEv2TagItemSet)) return false;
 		if (super.equals(obj)) return true;
-		APEv2FrameSet other = (APEv2FrameSet) obj;
+		APEv2TagItemSet other = (APEv2TagItemSet) obj;
 		if (id == null) {
 			if (other.id != null) return false;
 		} else if (other.id == null) return false;
