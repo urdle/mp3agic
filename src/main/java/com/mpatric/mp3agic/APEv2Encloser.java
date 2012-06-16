@@ -32,35 +32,6 @@ import java.nio.ByteOrder;
  * |----------------|---------|------------------------------------------------|
  * | Reserved       | 8 bytes | Must be zeroed                                 |  24-31
  * \===========================================================================/
- * 
- * ================================================================================
- * = 3 - APE Tag Flags
- * ================================================================================
- * 
- * The general flag structure for either items or headers / footers is the same.
- * Bits 31, 30 and 29 are specific to headers / footers, whereas 2 through 0 are
- * item specific.
- * 
- *  Note: APE Tags from Version 1.0 do not use any of the following.  All flags in
- * that version are zeroed and ignored when reading.
- * 
- * /=================================================================\
- * | Contains Header | Bit 31      | 1 - has header | 0 - no header  |
- * |-----------------|-------------|---------------------------------|
- * | Contains Footer | Bit 30      | 1 - NO footer | 0 - HAS footer  |
- * |-----------------|-------------|---------------------------------|
- * | Is Header       | Bit 29      | 1 - is header  | 0 - is footer  |
- * |-----------------|-------------|---------------------------------|
- * | Undefined       | Bits 28 - 3 | Undefined, must be zeroed       |
- * |-----------------|-------------|---------------------------------|
- * | Encoding        | Bits 2 - 1  | 00 - UTF-8                      |
- * |                 |             | 01 - Binary Data *              |
- * |                 |             | 10 - External Reference **      |
- * |                 |             | 11 - Reserved                   |
- * |-----------------|-------------|---------------------------------|
- * | Read Only       | Bit 0       | 1 - read only  | 0 - read/write |
- * \=================================================================/
- * 
  */
 
 public class APEv2Encloser {
@@ -68,11 +39,12 @@ public class APEv2Encloser {
 	int version;
 	int tagSize;
 	int itemCount;
-	boolean hasHeader;
-	boolean hasFooter;
-	boolean isHeader;
-	int encoding;
-	boolean readOnly;
+	APEv2TagFlag flags;
+//	boolean hasHeader;
+//	boolean hasFooter;
+//	boolean isHeader;
+//	int encoding;
+//	boolean readOnly;
 
 	/*
 	 * public APEv2Encloser(byte[] bytes) throws InvalidDataException { if
@@ -134,13 +106,14 @@ public class APEv2Encloser {
 
 		// Warning : Because of Little-Endian, bits are ordered :
 		// 7-0 / 15-8 / 23-16 / 31-24
+		flags=new APEv2TagFlag(bytes, 20);
 
-		hasHeader = ((bytes[23] & 0x80) != 0);
-		hasFooter = ((bytes[23] & 0x40) == 0);
-		isHeader = ((bytes[23] & 0x20) != 0);
-
-		encoding = (bytes[20] & 0x06);
-		readOnly = ((bytes[20] & 0x01) != 0);
+//		hasHeader = ((bytes[23] & 0x80) != 0);
+//		hasFooter = ((bytes[23] & 0x40) == 0);
+//		isHeader = ((bytes[23] & 0x20) != 0);
+//
+//		encoding = (bytes[20] & 0x06);
+//		readOnly = ((bytes[20] & 0x01) != 0);
 
 		/*
 		 * byte[] buffer=new byte[4]; buffer[0]=0; tagFlags =
@@ -203,9 +176,7 @@ public class APEv2Encloser {
 	@Override
 	public String toString() {
 		return "APEv2Encloser [version=" + version + ", tagSize=" + tagSize
-				+ ", itemCount=" + itemCount + ", hasHeader=" + hasHeader
-				+ ", hasFooter=" + hasFooter + ", isHeader=" + isHeader
-				+ ", encoding=" + encoding + ", readOnly=" + readOnly + "]";
+				+ ", itemCount=" + itemCount + ", flags=" + flags + "]";
 	}
 
 }

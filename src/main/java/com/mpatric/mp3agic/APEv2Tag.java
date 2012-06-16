@@ -8,19 +8,36 @@ import java.util.TreeMap;
 public class APEv2Tag implements APEv2 {
 
 	private final Map<String, APEv2TagItem> frameSets;
-	APEv2Encloser header = null;
-	APEv2Encloser footer = null;
-	APEv2Encloser encloser = null;
+	//private APEv2Encloser header = null;
+	//private APEv2Encloser footer = null;
+	private APEv2Encloser encloser = null;
+	boolean isAtTheEnd;
 	
+	public APEv2Encloser getEncloser() {
+		return encloser;
+	}
+
+	public void setEncloser(APEv2Encloser encloser) {
+		this.encloser = encloser;
+	}
+
+	public boolean isAtTheEnd() {
+		return isAtTheEnd;
+	}
+
+	public void setAtTheEnd(boolean isAtTheEnd) {
+		this.isAtTheEnd = isAtTheEnd;
+	}
+
 	public APEv2Tag() {
 		frameSets = new TreeMap<String, APEv2TagItem>();
 	}
 
-	public APEv2Tag(byte[] bytes) throws NoSuchTagException,
+	/*public APEv2Tag(byte[] bytes) throws NoSuchTagException,
 			UnsupportedTagException, InvalidDataException {
 		frameSets = new TreeMap<String, APEv2TagItem>();
 		unpackTag(bytes);
-	}
+	}*/
 
 	/*
 	 * public APEv2Tag(RandomAccessFile file) throws NoSuchTagException,
@@ -48,11 +65,13 @@ public class APEv2Tag implements APEv2 {
 		
 		try {
 			encloser = new APEv2Encloser(file, id3v2EndOffset, false);
+			isAtTheEnd=false;
 			firstFrameOffset = id3v2EndOffset + APEv2Encloser.ENCLOSURE_SIZE ;
 		} catch (InvalidDataException e1) {
 			// System.out.println("ape not ahead : " + e.getMessage());
 			try {
 				encloser = new APEv2Encloser(file, id3v1StartOffset, true);
+				isAtTheEnd=true;
 				firstFrameOffset = id3v1StartOffset - encloser.tagSize;
 			} catch (InvalidDataException e2) {
 				// System.out.println("ape not at the end : " + e.getMessage());
@@ -63,7 +82,7 @@ public class APEv2Tag implements APEv2 {
 			throw new NoSuchTagException("No APEv2 Header/Footer found.");
 		}
 		
-		if (encloser.isHeader) {
+/*		if (encloser.isHeader) {
 			header = encloser;
 			if (header.hasFooter) {
 				try {
@@ -91,7 +110,7 @@ public class APEv2Tag implements APEv2 {
 			}
 			
 		}
-		
+*/		
 		ReadItemSet(file, firstFrameOffset, encloser.itemCount, encloser.tagSize);
 	}
 
@@ -115,11 +134,34 @@ public class APEv2Tag implements APEv2 {
 		}
 	}
 
-	private void unpackTag(byte[] bytes) throws NoSuchTagException,
+	public byte[] toBytes() throws NotSupportedException {
+		byte[] bytes = new byte[getLength()];
+		packTag(bytes, 0);
+		return bytes;
+	}
+
+	private int getLength() {
+		if (encloser.flags.hasHeader() && encloser.flags.hasFooter()) {
+			return encloser.tagSize + APEv2Encloser.ENCLOSURE_SIZE;
+		}
+		return encloser.tagSize;
+	}
+
+	public void toBytes(byte[] bytes, int offset) throws NotSupportedException {
+		packTag(bytes, offset);
+	}
+
+	
+private void packTag(byte[] bytes, int offset) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/*	private void unpackTag(byte[] bytes) throws NoSuchTagException,
 			UnsupportedTagException, InvalidDataException {
 		// TODO Auto-generated method stub
 	}
-
+*/
 	@Override
 	public Map<String, APEv2TagItem> getFrameSets() {
 		// TODO Auto-generated method stub

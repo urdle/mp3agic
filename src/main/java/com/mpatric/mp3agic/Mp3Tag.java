@@ -5,7 +5,7 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Mp3File extends FileWrapper {
+public class Mp3Tag extends FileWrapper {
 
 	private static final int DEFAULT_BUFFER_LENGTH = 65536;
 	private static final int MINIMUM_BUFFER_LENGTH = 40;
@@ -35,22 +35,22 @@ public class Mp3File extends FileWrapper {
 	private byte[] customTag;
 	private boolean scanFile;
 	
-	protected Mp3File() {
+	protected Mp3Tag() {
 	}
 
-	public Mp3File(String filename) throws IOException, UnsupportedTagException, InvalidDataException {
+	public Mp3Tag(String filename) throws IOException, UnsupportedTagException, InvalidDataException {
 		this(filename, DEFAULT_BUFFER_LENGTH, true);
 	}
 
-	public Mp3File(String filename, int bufferLength) throws IOException, UnsupportedTagException, InvalidDataException {
+	public Mp3Tag(String filename, int bufferLength) throws IOException, UnsupportedTagException, InvalidDataException {
 		this(filename, bufferLength, true);
 	}
 	
-	public Mp3File(String filename, boolean scanFile) throws IOException, UnsupportedTagException, InvalidDataException {
+	public Mp3Tag(String filename, boolean scanFile) throws IOException, UnsupportedTagException, InvalidDataException {
 		this(filename, DEFAULT_BUFFER_LENGTH, scanFile);
 	}
 	
-	public Mp3File(String filename, int bufferLength, boolean scanFile) throws IOException, UnsupportedTagException, InvalidDataException {		
+	public Mp3Tag(String filename, int bufferLength, boolean scanFile) throws IOException, UnsupportedTagException, InvalidDataException {		
 		super(filename);
 		if (bufferLength < MINIMUM_BUFFER_LENGTH + 1) throw new IllegalArgumentException("Buffer too small");
 		this.bufferLength = bufferLength;
@@ -423,10 +423,6 @@ private boolean isAPEv2HeaderOrFooter(byte[] bytes) throws IOException, Unsuppor
 		return id3v2Tag != null;
 	}
 
-	public boolean hasAPEv2Tag() {
-		return apev2Tag != null;
-	}
-
 	public ID3v2 getId3v2Tag() {
 		return id3v2Tag;
 	}
@@ -467,9 +463,6 @@ private boolean isAPEv2HeaderOrFooter(byte[] bytes) throws IOException, Unsuppor
 			saveMpegFrames(saveFile);
 			if (hasCustomTag()) {
 				saveFile.write(customTag);
-			}
-			if (hasAPEv2Tag()) {
-				saveFile.write(apev2Tag.toBytes());
 			}
 			if (hasId3v1Tag()) {
 				saveFile.write(id3v1Tag.toBytes());
