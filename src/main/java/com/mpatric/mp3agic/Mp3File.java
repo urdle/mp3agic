@@ -31,7 +31,7 @@ public class Mp3File extends FileWrapper {
 	private String version;
 	private ID3v1 id3v1Tag;
 	private ID3v2 id3v2Tag;
-	private APEv2 apev2Tag;
+	private APEv2Tag apev2Tag;
 	private byte[] customTag;
 	private boolean scanFile;
 	
@@ -427,6 +427,10 @@ private boolean isAPEv2HeaderOrFooter(byte[] bytes) throws IOException, Unsuppor
 		return apev2Tag != null;
 	}
 
+	public APEv2Tag getAPEv2Tag() {
+		return apev2Tag;
+	}
+
 	public ID3v2 getId3v2Tag() {
 		return id3v2Tag;
 	}
@@ -435,8 +439,16 @@ private boolean isAPEv2HeaderOrFooter(byte[] bytes) throws IOException, Unsuppor
 		this.id3v2Tag = id3v2Tag;
 	}
 	
+	public void setAPEv2Tag(APEv2Tag apev2Tag) {
+		this.apev2Tag = apev2Tag;
+	}
+	
 	public void removeId3v2Tag() {
 		this.id3v2Tag = null;
+	}
+	
+	public void removeAPEv2Tag() {
+		this.apev2Tag = null;
 	}
 	
 	public boolean hasCustomTag() {

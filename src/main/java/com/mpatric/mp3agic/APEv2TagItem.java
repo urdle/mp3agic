@@ -157,7 +157,7 @@ public class APEv2TagItem {
 	public String toString() {
 		return "APEv2TagItem [id=" + id + ", dataLength=" + dataLength
 				+ ", data=" +  getDataString().split("\n")[0]
-				+ ", flags=" + flags + "]";
+				+ ", flags=" + flags + "]\n";
 	}
 	
 	

@@ -5,7 +5,7 @@ import java.io.RandomAccessFile;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class APEv2Tag implements APEv2 {
+public class APEv2Tag {
 
 	private final Map<String, APEv2TagItem> frameSets;
 	//private APEv2Encloser header = null;
@@ -162,10 +162,22 @@ private void packTag(byte[] bytes, int offset) {
 		// TODO Auto-generated method stub
 	}
 */
-	@Override
+
 	public Map<String, APEv2TagItem> getFrameSets() {
 		// TODO Auto-generated method stub
 		return frameSets;
+	}
+
+	@Override
+	public String toString() {
+		return "APEv2Tag [frameSets=" + frameSets + "\n, encloser=" + encloser
+				+ "\n, isAtTheEnd=" + isAtTheEnd + "]";
+	}
+
+	public String getDataString(String id) {
+		APEv2TagItem item=getFrameSets().get(id);
+		if (item != null) return item.getDataString();
+		return null;
 	}
 
 }

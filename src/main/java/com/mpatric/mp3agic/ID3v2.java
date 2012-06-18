@@ -1,5 +1,7 @@
 package com.mpatric.mp3agic;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Map;
 
 public interface ID3v2 extends ID3v1 {
@@ -47,4 +49,6 @@ public interface ID3v2 extends ID3v1 {
 	
 	Map<String, ID3v2FrameSet> getFrameSets();
 	void clearFrameSet(String id);
+	ArrayList<String> getAllUserDefinedData() throws UnsupportedEncodingException;
+	String getUserDefinedData(String string) throws UnsupportedEncodingException;
 }
